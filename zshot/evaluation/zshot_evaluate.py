@@ -45,24 +45,19 @@ def evaluate(nlp: spacy.language.Language,
             nlp.get_pipe("zshot").entities = dataset[split].entities
             if nlp.get_pipe("zshot").linker:
                 pipe = LinkerPipeline(nlp, batch_size)
-                result.update(
-                    {
-                        field_name: {
-                            'linker': linker_evaluator.compute(pipe, dataset[split], metric=metric)
-                        }
-                    }
-                )
+                result[field_name] = {
+                    'linker': linker_evaluator.compute(
+                        pipe, dataset[split], metric=metric
+                    )
+                }
             # TODO: Add support for mentions_extractor pipelines and evaluation
             if nlp.get_pipe("zshot").mentions_extractor:
                 pipe = MentionsExtractorPipeline(nlp, batch_size)
-                result.update(
-                    {
-                        field_name: {
-                            'mentions_extractor': mentions_extractor_evaluator.compute(pipe, dataset[split],
-                                                                                       metric=metric)
-                        }
-                    }
-                )
+                result[field_name] = {
+                    'mentions_extractor': mentions_extractor_evaluator.compute(
+                        pipe, dataset[split], metric=metric
+                    )
+                }
 
     table = PrettyTable()
     table.field_names = field_names
@@ -82,12 +77,15 @@ def evaluate(nlp: spacy.language.Language,
             linker_micros.append("{:.2f}%".format(result[field_name]['linker']['overall_f1_micro'] * 100))
             linker_macros.append("{:.2f}%".format(result[field_name]['linker']['overall_f1_macro'] * 100))
 
-        rows.append(["Linker Precision"] + linker_precisions)
-        rows.append(["Linker Recall"] + linker_recalls)
-        rows.append(["Linker Accuracy"] + linker_accuracies)
-        rows.append(["Linker F1-score micro"] + linker_micros)
-        rows.append(["Linker F1-score macro"] + linker_macros)
-
+        rows.extend(
+            (
+                ["Linker Precision"] + linker_precisions,
+                ["Linker Recall"] + linker_recalls,
+                ["Linker Accuracy"] + linker_accuracies,
+                ["Linker F1-score micro"] + linker_micros,
+                ["Linker F1-score macro"] + linker_macros,
+            )
+        )
     if nlp.get_pipe("zshot").mentions_extractor:
         mentions_extractor_precisions = []
         mentions_extractor_recalls = []
@@ -108,12 +106,19 @@ def evaluate(nlp: spacy.language.Language,
             mentions_extractor_macros.append(
                 "{:.2f}%".format(result[field_name]['mentions_extractor']['overall_f1_macro'] * 100))
 
-        rows.append(["Mentions extractor Precision"] + mentions_extractor_precisions)
-        rows.append(["Mentions extractor Recall"] + mentions_extractor_recalls)
-        rows.append(["Mentions extractor Accuracy"] + mentions_extractor_accuracies)
-        rows.append(["Mentions extractor F1-score micro"] + mentions_extractor_micros)
-        rows.append(["Mentions extractor F1-score macro"] + mentions_extractor_macros)
-
+        rows.extend(
+            (
+                ["Mentions extractor Precision"]
+                + mentions_extractor_precisions,
+                ["Mentions extractor Recall"] + mentions_extractor_recalls,
+                ["Mentions extractor Accuracy"]
+                + mentions_extractor_accuracies,
+                ["Mentions extractor F1-score micro"]
+                + mentions_extractor_micros,
+                ["Mentions extractor F1-score macro"]
+                + mentions_extractor_macros,
+            )
+        )
     table.add_rows(rows)
 
     return table.get_string()

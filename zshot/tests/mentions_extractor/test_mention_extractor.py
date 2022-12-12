@@ -30,10 +30,7 @@ class DummyMentionsExtractorWithNER(MentionsExtractor):
 
 class DummyMentionsExtractorWithEntities(MentionsExtractor):
     def predict(self, docs: Iterator[Doc], batch_size=None):
-        return [
-            [Span(0, len(doc.text) - 1)]
-            for idx, doc in enumerate(docs)
-        ]
+        return [[Span(0, len(doc.text) - 1)] for doc in docs]
 
 
 def test_dummy_mentions_extractor():

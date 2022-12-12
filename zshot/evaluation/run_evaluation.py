@@ -43,11 +43,7 @@ if __name__ == "__main__":
     else:
         mentions_extractors = [args.mentions_extractor]
 
-    if args.linker == "all":
-        linkers = list(LINKERS.keys())
-    else:
-        linkers = [args.linker]
-
+    linkers = list(LINKERS.keys()) if args.linker == "all" else [args.linker]
     if args.mode == "full":
         if linkers:
             for linker in linkers:

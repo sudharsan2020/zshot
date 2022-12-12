@@ -36,7 +36,7 @@ def test_tars_end2end_pipeline_with_entities():
     config_zshot = PipelineConfig(linker=LinkerTARS(), entities=EX_ENTITIES)
     nlp.add_pipe("zshot", config=config_zshot, last=True)
     assert "zshot" in nlp.pipe_names
-    docs = [doc for doc in nlp.pipe(EX_DOCS)]
+    docs = list(nlp.pipe(EX_DOCS))
     assert all(doc.ents != () for doc in docs)
 
 

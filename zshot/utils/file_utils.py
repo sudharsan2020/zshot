@@ -45,7 +45,7 @@ def filter_extended_spans(spans: List[Span], doc: Doc = None) -> List[Span]:
     """
     spacy_spans = [span.to_spacy_span(doc) for span in spans]
     spans = [Span.from_spacy_span(spacy_span, score=span.score) for spacy_span, span in zip(spacy_spans, spans)]
-    if not all([s.score for s in spans]):
+    if not all(s.score for s in spans):
         spans = spacy_filter_spans(spacy_spans)
         spans = [Span.from_spacy_span(span) for span in spans]
         return spans
@@ -56,7 +56,7 @@ def filter_extended_spans(spans: List[Span], doc: Doc = None) -> List[Span]:
     for i, span in enumerate(spans):
         r = range(span.start, span.end + 1)
         group = [span]
-        if any([set(r) & set(r_) for r_ in rs]):
+        if any(set(r) & set(r_) for r_ in rs):
             continue
 
         for span_ in spans[i:]:
@@ -68,9 +68,4 @@ def filter_extended_spans(spans: List[Span], doc: Doc = None) -> List[Span]:
         rs.append(r)
         spans_grouped.append(group)
 
-    # Fix overlaps getting the one with higher score
-    final_mentions = []
-    for group in spans_grouped:
-        final_mentions.append(max(group, key=lambda x: x.score))
-
-    return final_mentions
+    return [max(group, key=lambda x: x.score) for group in spans_grouped]

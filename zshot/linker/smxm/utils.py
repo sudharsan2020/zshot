@@ -45,11 +45,9 @@ def load_model(url: str, output_path: str, folder_name: str) -> BertTaggerMultiC
             model_zip.extractall(output_path)
         os.remove(model_zipfile_path)
 
-    model = BertTaggerMultiClass.from_pretrained(
+    return BertTaggerMultiClass.from_pretrained(
         model_folder_path, output_hidden_states=True
     ).to(device)
-
-    return model
 
 
 def predictions_to_span_annotations(

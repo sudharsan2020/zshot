@@ -105,8 +105,7 @@ class Zshot:
         docs = list(docs)
         self.extracts_mentions(docs, batch_size=batch_size)
         self.link_entities(docs, batch_size=batch_size)
-        for doc in docs:
-            yield doc
+        yield from docs
 
     def extracts_mentions(self, docs: Iterator[Doc], batch_size=None):
         if self.mentions_extractor and not (self.linker is not None and self.linker.is_end2end):

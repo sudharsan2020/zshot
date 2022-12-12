@@ -50,7 +50,7 @@ def test_flair_ner_mentions_extractor_pipeline():
     config_zshot = PipelineConfig(mentions_extractor=MentionsExtractorFlair(ExtractorType.NER))
     nlp.add_pipe("zshot", config=config_zshot, last=True)
     assert "zshot" in nlp.pipe_names
-    docs = [doc for doc in nlp.pipe(EX_DOCS)]
+    docs = list(nlp.pipe(EX_DOCS))
     assert all(doc.ents == () for doc in docs)
     assert all(len(doc._.mentions) > 0 for doc in docs)
 
@@ -62,6 +62,6 @@ def test_flair_pos_mentions_extractor_pipeline():
     config_zshot = PipelineConfig(mentions_extractor=MentionsExtractorFlair(ExtractorType.POS))
     nlp.add_pipe("zshot", config=config_zshot, last=True)
     assert "zshot" in nlp.pipe_names
-    docs = [doc for doc in nlp.pipe(EX_DOCS)]
+    docs = list(nlp.pipe(EX_DOCS))
     assert all(doc.ents == () for doc in docs)
     assert all(len(doc._.mentions) > 0 for doc in docs)

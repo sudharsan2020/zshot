@@ -34,15 +34,16 @@ class ZeroShotTokenClassificationEvaluator(TokenClassificationEvaluator):
             feature_extractor=None,  # noqa: F821
             device: int = None,
     ):
-        pipe = super(TokenClassificationEvaluator, self).prepare_pipeline(model_or_pipeline, tokenizer, feature_extractor, device)
-        return pipe
+        return super(TokenClassificationEvaluator, self).prepare_pipeline(
+            model_or_pipeline, tokenizer, feature_extractor, device
+        )
 
 
 class MentionsExtractorEvaluator(ZeroShotTokenClassificationEvaluator):
     def parse_label(self, label):
         if label != "O":
             if label.startswith("B-") or label.startswith("I-"):
-                label = label[:2] + "MENTION"
+                label = f"{label[:2]}MENTION"
             else:
                 label = "MENTION"
 

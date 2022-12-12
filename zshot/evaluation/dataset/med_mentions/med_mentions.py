@@ -52,17 +52,22 @@ def _delete_temporal_files(cache_path):
 
 
 def _create_split_dataset(data, split):
-    dataset = DatasetWithEntities.from_dict(
+    return DatasetWithEntities.from_dict(
         {
             "tokens": [[tok.word for tok in sentence] for sentence in data],
-            "ner_tags": [[tok.label_id for tok in sentence] for sentence in data]
+            "ner_tags": [
+                [tok.label_id for tok in sentence] for sentence in data
+            ],
         },
         split=split,
         entities=list(
-            filter(lambda ent: MEDMENTIONS_TYPE_INV[ent.name] in MEDMENTIONS_SPLITS[str(split)],
-                   MEDMENTIONS_ENTITIES))
+            filter(
+                lambda ent: MEDMENTIONS_TYPE_INV[ent.name]
+                in MEDMENTIONS_SPLITS[str(split)],
+                MEDMENTIONS_ENTITIES,
+            )
+        ),
     )
-    return dataset
 
 
 def load_medmentions() -> DatasetDict[DatasetWithEntities]:

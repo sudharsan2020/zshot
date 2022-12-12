@@ -68,7 +68,7 @@ def test_dummy_linker_with_entities_config():
     assert len(doc._.mentions) > 0
     assert len(doc.ents) > 0
     assert len(doc._.spans) > 0
-    assert all([bool(ent.label_) for ent in doc.ents])
+    assert all(bool(ent.label_) for ent in doc.ents)
 
 
 def test_dummy_linker_end2end():

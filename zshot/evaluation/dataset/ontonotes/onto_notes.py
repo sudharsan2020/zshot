@@ -41,7 +41,7 @@ def remove_other_tasks(sentence):
 
 
 def is_not_empty(sentence):
-    return not all([s == 0 for s in sentence['named_entities']])
+    return any(s != 0 for s in sentence['named_entities'])
 
 
 def remove_out_of_split(sentence, split):

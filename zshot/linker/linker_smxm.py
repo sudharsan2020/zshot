@@ -84,12 +84,15 @@ class LinkerSMXM(Linker):
                 probability = (
                     torch.nn.Softmax(dim=-1)(outputs).cpu().numpy().tolist()
                 )
-                probabilities += [p for p in probability]
+                probabilities += list(probability)
                 outputs = torch.argmax(outputs, dim=2)
                 preds += outputs.detach().cpu().numpy().tolist()
 
-        span_annotations = predictions_to_span_annotations(
-            sentences, preds, probabilities, entity_labels, self.tokenizer, max_sentence_tokens
+        return predictions_to_span_annotations(
+            sentences,
+            preds,
+            probabilities,
+            entity_labels,
+            self.tokenizer,
+            max_sentence_tokens,
         )
-
-        return span_annotations
