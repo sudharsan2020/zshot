@@ -30,7 +30,7 @@ def encode_data(
     tokenized_descriptions = [
         tokenizer.tokenize(description) for description in entity_descriptions
     ]
-    max_descriptions_tokens = max([len(d) for d in tokenized_descriptions])
+    max_descriptions_tokens = max(len(d) for d in tokenized_descriptions)
     max_sentence_tokens = 512 - max_descriptions_tokens - 3
 
     for sentence in sentences:
@@ -99,7 +99,7 @@ def tagger_multiclass_collator(
     padded_sequence_mask = []
 
     sentence_lengths = [
-        max([len(bert_tokens) for bert_tokens in input_ids_lists[i]])
+        max(len(bert_tokens) for bert_tokens in input_ids_lists[i])
         for i in range(len(input_ids_lists))
     ]
     longest_sent = max(sentence_lengths)

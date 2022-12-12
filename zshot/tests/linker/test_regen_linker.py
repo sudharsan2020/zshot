@@ -30,5 +30,5 @@ def test_regen_linker_pipeline():
     nlp.add_pipe("zshot", config=config, last=True)
     assert "zshot" in nlp.pipe_names
 
-    docs = [doc for doc in nlp.pipe(EX_DOCS)]
+    docs = list(nlp.pipe(EX_DOCS))
     assert all(len(doc.ents) > 0 for doc in docs)

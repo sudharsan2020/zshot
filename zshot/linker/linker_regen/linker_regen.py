@@ -86,12 +86,11 @@ class LinkerRegen(Linker):
                                   start_delimiter=START_ENT_TOKEN,
                                   end_delimiter=END_ENT_TOKEN,
                                   ) for d in data_to_link]
-        input_args = {
-            k: v
-            for k, v in self.tokenizer.batch_encode_plus(
+        input_args = dict(
+            self.tokenizer.batch_encode_plus(
                 sentences, padding=True, return_tensors="pt"
             ).items()
-        }
+        )
 
         outputs = self.model.generate(
             **input_args,

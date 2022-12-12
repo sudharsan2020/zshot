@@ -25,12 +25,12 @@ def convert_to_iob(id_, text, entities, nlp, end_index, start_index):
             ent = entities[0][1] if entities else "O"
             if entities and tok.idx + current_sent_pos == start_index[0]:
                 count += 1
-                label = 'B-' + MEDMENTIONS_TYPE_INV[ent]
-                label_id = 'B-' + ent
+                label = f'B-{MEDMENTIONS_TYPE_INV[ent]}'
+                label_id = f'B-{ent}'
                 token = Token(word=word, label=label, label_id=label_id)
             elif entities and start_index[0] < tok.idx + current_sent_pos <= end_index[0]:
-                label = 'I-' + MEDMENTIONS_TYPE_INV[ent]
-                label_id = 'I-' + ent
+                label = f'I-{MEDMENTIONS_TYPE_INV[ent]}'
+                label_id = f'I-{ent}'
                 token = Token(word=word, label=label, label_id=label_id)
             else:
                 token = Token(word=word, label='O', label_id="O")

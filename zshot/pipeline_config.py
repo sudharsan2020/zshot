@@ -18,18 +18,18 @@ class PipelineConfig(dict):
 
         if mentions_extractor:
             mention_extractor_id = PipelineConfig.param(mentions_extractor)
-            config.update({'mentions_extractor': mention_extractor_id})
+            config['mentions_extractor'] = mention_extractor_id
 
         if linker:
             linker_id = PipelineConfig.param(linker)
-            config.update({'linker': linker_id})
+            config['linker'] = linker_id
 
         if entities:
             entities_id = PipelineConfig.param(entities)
-            config.update({'entities': entities_id})
+            config['entities'] = entities_id
 
         if disable_default_ner:
-            config.update({'disable_default_ner': disable_default_ner})
+            config['disable_default_ner'] = disable_default_ner
 
         super().__init__(**config)
 

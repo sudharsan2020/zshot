@@ -54,12 +54,14 @@ class MentionsExtractorFlair(MentionsExtractor):
 
         spans = []
         for sent, doc in zip(sentences, docs):
-            spans_tmp = []
-            for i in range(len(sent.labels)):
-                if sent.labels[i].value in self.ALLOWED_CHUNKS:
-                    spans_tmp.append(Span(sent.labels[i].data_point.start_position,
-                                          sent.labels[i].data_point.end_position))
-
+            spans_tmp = [
+                Span(
+                    sent.labels[i].data_point.start_position,
+                    sent.labels[i].data_point.end_position,
+                )
+                for i in range(len(sent.labels))
+                if sent.labels[i].value in self.ALLOWED_CHUNKS
+            ]
             spans.append(spans_tmp)
 
         return spans

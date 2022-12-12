@@ -30,16 +30,16 @@ _config = {
     "test_mentions": None,
     "interactive": False,
     "top_k": 1,
-    "biencoder_model": MODELS_CACHE_PATH + "biencoder_wiki_large.bin",
-    "biencoder_config": MODELS_CACHE_PATH + "biencoder_wiki_large.json",
-    "entity_catalogue": MODELS_CACHE_PATH + "entity.jsonl",
-    "entity_encoding": MODELS_CACHE_PATH + "all_entities_large.t7",
-    "crossencoder_model": MODELS_CACHE_PATH + "crossencoder_wiki_large.bin",
-    "crossencoder_config": MODELS_CACHE_PATH + "crossencoder_wiki_large.json",
+    "biencoder_model": f"{MODELS_CACHE_PATH}biencoder_wiki_large.bin",
+    "biencoder_config": f"{MODELS_CACHE_PATH}biencoder_wiki_large.json",
+    "entity_catalogue": f"{MODELS_CACHE_PATH}entity.jsonl",
+    "entity_encoding": f"{MODELS_CACHE_PATH}all_entities_large.t7",
+    "crossencoder_model": f"{MODELS_CACHE_PATH}crossencoder_wiki_large.bin",
+    "crossencoder_config": f"{MODELS_CACHE_PATH}crossencoder_wiki_large.json",
     "fast": True,
     "faiss_index": None,
     "index_path": None,
-    "output_path": "logs/"
+    "output_path": "logs/",
 }
 
 
@@ -131,17 +131,18 @@ class LinkerBlink(Linker):
         self.load_models()
         data_to_link = []
         for doc_id, doc in enumerate(docs):
-            for mention_id, mention in enumerate(doc._.mentions):
-                data_to_link.append(
-                    {
-                        "id": doc_id,
-                        "mention_id": mention_id,
-                        "label": "unknown",
-                        "label_id": -1,
-                        "context_left": doc.text[:mention.start_char].lower(),
-                        "mention": mention.text.lower(),
-                        "context_right": doc.text[mention.end_char:].lower(),
-                    })
+            data_to_link.extend(
+                {
+                    "id": doc_id,
+                    "mention_id": mention_id,
+                    "label": "unknown",
+                    "label_id": -1,
+                    "context_left": doc.text[: mention.start_char].lower(),
+                    "mention": mention.text.lower(),
+                    "context_right": doc.text[mention.end_char :].lower(),
+                }
+                for mention_id, mention in enumerate(doc._.mentions)
+            )
         if not data_to_link:
             return []
 
@@ -158,6 +159,4 @@ class LinkerBlink(Linker):
                 spans_annotations_values['id'] = [span]
 
         spans_annotations_keys = sorted(spans_annotations_values.keys())
-        spans_annotations = [spans_annotations_values[key] for key in spans_annotations_keys]
-
-        return spans_annotations
+        return [spans_annotations_values[key] for key in spans_annotations_keys]

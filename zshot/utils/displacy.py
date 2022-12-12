@@ -19,7 +19,7 @@ def ents_colors(doc: Doc):
         b = hash_s & 0x0000FF
         return '#%02x%02x%02x' % (r, g, b)
 
-    labels = set(ent.label_ for ent in doc.ents)
+    labels = {ent.label_ for ent in doc.ents}
     colors = dict([(ent, color_from_label(ent)) for ent in labels])
     return colors
 

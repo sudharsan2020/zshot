@@ -17,9 +17,9 @@ class Span:
             'alignment_mode': 'expand'
         }
         if self.kb_id:
-            kwargs.update({'kb_id': self.kb_id})
+            kwargs['kb_id'] = self.kb_id
         if self.label:
-            kwargs.update({'label': self.label})
+            kwargs['label'] = self.label
 
         return doc.char_span(self.start, self.end, **kwargs)
 

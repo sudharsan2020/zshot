@@ -25,10 +25,16 @@ class DummyLinker(Linker):
     def predict(self, docs: Iterator[Doc], batch_size=None):
         sentences = []
         for doc in docs:
-            preds = []
-            for span, label, score in self.predictions:
-                if span in doc.text:
-                    preds.append(Span(doc.text.find(span), doc.text.find(span) + len(span), label=label, score=score))
+            preds = [
+                Span(
+                    doc.text.find(span),
+                    doc.text.find(span) + len(span),
+                    label=label,
+                    score=score,
+                )
+                for span, label, score in self.predictions
+                if span in doc.text
+            ]
             sentences.append(preds)
 
         return sentences
